@@ -18,7 +18,7 @@ const deployments = [
     service: "billing-postgres",
     component: "pgbouncer",
     version: "plat-2026.6.30",
-    team: "core-platform",
+    team: "infra-team",
     deployed_at: "2026-06-30T08:58:00Z",
     change: "Reduce pgbouncer default_pool_size 100 -> 40 to cut idle Postgres connections (cost optimization).",
     risk: "HIGH: lowers max concurrent DB connections per pool from 100 to 40; starves connection-heavy callers (checkout-api, billing-api, invoice-worker) under normal load. Deployed 4 minutes before the 5xx onset — prime suspect / root cause for INC-1001.",

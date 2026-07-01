@@ -29,19 +29,19 @@ severity.
 ## Dependencies We Consume (but do not own)
 
 - Stripe (payment provider)
-- billing-postgres (owned by Core Platform)
-- kafka-billing-events (owned by Core Platform)
+- billing-postgres (owned by Infra Team)
+- kafka-billing-events (owned by Infra Team)
 
 ## Service Ownership (who to escalate to)
 
 We **own** checkout-api, billing-api, invoice-worker, and the webhook processor.
-We **consume but do not own** these — they belong to **Core Platform / SRE**:
+We **consume but do not own** these — they belong to **Infra Team**:
 
 - billing-postgres (and the **pgbouncer** connection pooler in front of it)
 - kafka-billing-events
 
 If the binding constraint of an incident is in something we do not own, the
-correct action is to **escalate / hand off to Core Platform with the evidence** —
+correct action is to **escalate / hand off to Infra Team with the evidence** —
 not to keep digging in the payment path or to touch their infrastructure.
 
 ## Is This Incident Ours? (triage BEFORE deep-diving)
@@ -55,11 +55,10 @@ For a checkout-api 5xx, decide ownership first using three checks:
 3. **Dominant error:** what error appears first and most? If it is
    `could not obtain connection from pool 'billing-postgres'` /
    `pgbouncer: pool 'billing' is full`, the binding constraint is the **DB
-   connection pool** — Core Platform's surface, not ours.
+   connection pool** — Infra Team's surface, not ours.
 
 **If timing clears our deploy, Stripe is healthy, and the dominant error is
-connection-pool exhaustion → this is NOT a Payments root cause. Hand off to Core
-Platform.** Provide the incident, the pool-exhaustion log lines, and the
+connection-pool exhaustion → this is NOT a Payments root cause. Hand off to Infra Team.** Provide the incident, the pool-exhaustion log lines, and the
 deployment timeline. You may reduce our own contribution (e.g. disable
 `stripe_webhook_auto_retry`) but state clearly it is not the root cause and will
 not resolve the incident.
@@ -93,7 +92,7 @@ actually retrieved, not on the runbook alone.
    dominant error and its timestamp.
 3. `demo_list_deployments` around the incident time — compare our checkout-api
    deploy time to the 5xx onset, and note any **non-Payments** change (e.g. a
-   pgbouncer / pool-size change owned by Core Platform).
+   pgbouncer / pool-size change owned by Infra Team).
 4. Check `stripe` and `webhook` log lines to confirm whether Stripe is the cause
    or just a downstream symptom of the DB pool.
 5. Search local runbooks for "checkout 5xx", "is this ours", and "ownership".
@@ -105,17 +104,16 @@ actually retrieved, not on the runbook alone.
   pain.
 - Do not manually mark invoices as paid without Finance Ops approval.
 - Do not resolve the incident until the Stripe webhook backlog is drained to zero.
-- Do not change billing-postgres / pgbouncer settings yourself — that is Core
-  Platform's surface; escalate to them instead.
+- Do not change billing-postgres / pgbouncer settings yourself — that is Infra Team's surface; escalate to them instead.
 
 ## Preferred Mitigations (our surface)
 
 - If the root cause is ours: roll back the most recent checkout-api deploy, or
   disable the `stripe_webhook_auto_retry` feature flag.
 - **If the root cause is shared infra we don't own (DB connection pool /
-  pgbouncer): escalate to Core Platform.** That is the correct mitigation for us.
+  pgbouncer): escalate to Infra Team.** That is the correct mitigation for us.
   Optionally disable `stripe_webhook_auto_retry` to stop adding any load while
-  Core Platform fixes the pool — but call it interim, not the fix.
+  Infra Team fixes the pool — but call it interim, not the fix.
 
 ## Preferred Response Style
 

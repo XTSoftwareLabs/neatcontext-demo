@@ -1,6 +1,6 @@
 # Runbook: billing-postgres connection-pool exhaustion (pgbouncer)
 
-**Owner:** Core Platform / SRE
+**Owner:** Infra Team
 **Applies to:** billing-postgres + its pgbouncer pooler
 
 ## Symptom
@@ -27,7 +27,7 @@ and time out long before Postgres is anywhere near its own limit.
 
 1. `demo_get_incident` — read the incident + timeline.
 2. `demo_list_deployments service=billing-postgres` (and check for any
-   core-platform / pgbouncer change in the window). A recent pool-size change is
+   infra-team / pgbouncer change in the window). A recent pool-size change is
    the prime suspect.
 3. `demo_search_logs service=billing-postgres` and
    `demo_search_logs service=checkout-api query=pool`. Look for "pool is full",

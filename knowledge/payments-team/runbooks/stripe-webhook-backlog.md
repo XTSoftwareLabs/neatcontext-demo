@@ -18,7 +18,7 @@ So before treating this as a payments/Stripe problem, check the pool.
    provider issue; throttle and wait it out.
 2. **Stripe is healthy but the handler is slow** — look at the log line; if it
    says the handler is *blocked waiting for a billing-postgres connection*, the
-   real problem is the DB connection pool (Core Platform's surface), not Stripe.
+   real problem is the DB connection pool (Infra Team's surface), not Stripe.
    The webhook latency is downstream.
 
 ## What to check
@@ -31,8 +31,7 @@ So before treating this as a payments/Stripe problem, check the pool.
 
 ## Action
 
-- If pool exhaustion is the cause: this is **not ours to fix** — hand off to Core
-  Platform (see `service-ownership.md`). Optionally disable
+- If pool exhaustion is the cause: this is **not ours to fix** — hand off to Infra Team (see `service-ownership.md`). Optionally disable
   `stripe_webhook_auto_retry` so retries stop adding load while they fix the pool.
 
 ## Do NOT

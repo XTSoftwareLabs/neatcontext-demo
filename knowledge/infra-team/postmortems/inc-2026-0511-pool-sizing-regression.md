@@ -3,7 +3,7 @@
 **Date:** 2026-05-11
 **Infra:** billing-postgres / pgbouncer
 **Severity:** SEV2
-**Owner:** Core Platform / SRE
+**Owner:** Infra Team
 
 ## Summary
 

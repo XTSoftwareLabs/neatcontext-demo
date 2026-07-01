@@ -16,7 +16,7 @@ incident off, the other finds and fixes the root cause.
 |---|---|
 | `servers/` | Three tiny local mock systems — incident management, logs, deployments — pre-filled with realistic data. |
 | `extension/` | `Ops Demo Systems`, a NeatContext extension (stdio MCP connector) giving the LLM read-only tools to query those systems. |
-| `profiles/` | Two domain profiles you import into NeatContext: `payments-team.md` and `platform-team.md`. |
+| `profiles/` | Two domain profiles you import into NeatContext: `payments-team.md` and `infra-team.md`. |
 | `knowledge/` | Each team's runbooks, TSGs, and postmortems — added as NeatContext knowledge bases. |
 
 ---
@@ -123,7 +123,7 @@ so the model reasons strictly from this team's context:
    What should we check first, and what's the safe action?
    ```
 
-![Payments analysis: pool exhaustion owned by Core Platform — hand off](images/06-payments-answer.png)
+![Payments analysis: pool exhaustion owned by Infra Team — hand off](images/06-payments-answer.png)
 
 **What you should see.** The model calls `demo_get_incident`, then
 `demo_search_logs` / `demo_list_deployments`, searches the Payments runbooks, and
@@ -133,28 +133,28 @@ runs the "is this ours?" triage:
   isn't the trigger;
 - Stripe is **healthy** → not the provider;
 - the dominant error is `could not obtain connection from pool 'billing-postgres'`
-  → the binding constraint is the **DB connection pool**, which Core Platform owns.
+  → the binding constraint is the **DB connection pool**, which Infra Team owns.
 
 ➡️ **Correct outcome for Payments: this is not our root cause — escalate / hand
-off to Core Platform**, with the evidence. (Optionally disable
+off to Infra Team**, with the evidence. (Optionally disable
 `stripe_webhook_auto_retry` as interim load relief, noting it's *not* the fix.)
 A good investigation can correctly end in a hand-off.
 
-### Step 6 — Investigate the SAME incident as Team B: Core Platform / SRE
+### Step 6 — Investigate the SAME incident as Team B: Infra Team
 
 Now switch the workspace to the other team:
 
-1. **Import the second profile.** Import **`profiles/platform-team.md`**. Both
-   profiles now exist in the sidebar — **select `platform-team`** so it's active.
+1. **Import the second profile.** Import **`profiles/infra-team.md`**. Both
+   profiles now exist in the sidebar — **select `infra-team`** so it's active.
 2. **Swap the knowledge base to this team's.** Remove the **`payments-team`**
    knowledge folder (click the trash icon next to it) and add
-   **`knowledge/platform-team`**, so only Platform's runbooks are searched.
+   **`knowledge/infra-team`**, so only Infra Team's runbooks are searched.
 
-![Switch to platform-team and remove Payments' knowledge folder](images/07-platform-switch-remove.png)
+![Switch to infra-team and remove Payments' knowledge folder](images/07-infra-switch-remove.png)
 
 3. Ask the **exact same question** with the **same incident URL** as Step 5.
 
-![Platform analysis: the 08:58 pgbouncer pool-size change is the root cause](images/08-platform-answer.png)
+![Infra Team analysis: the 08:58 pgbouncer pool-size change is the root cause](images/08-infra-answer.png)
 
 **What you should see.** Same tools, same data — but now the model owns the root
 cause. It zeroes in on the **08:58 pgbouncer `default_pool_size` 100 → 40
@@ -191,10 +191,10 @@ neatcontext-demo/
     deployment-system.js     # https://localhost:7803
   profiles/
     payments-team.md         # Team A domain profile
-    platform-team.md         # Team B domain profile
+    infra-team.md            # Team B domain profile
   knowledge/
     payments-team/           # Team A runbooks / tsg / postmortems
-    platform-team/           # Team B runbooks / tsg / postmortems
+    infra-team/              # Team B runbooks / tsg / postmortems
   extension/
     neatcontext-extension.json
     server.cjs               # stdio MCP server -> the three mock systems
@@ -206,7 +206,7 @@ neatcontext-demo/
 
 A single SEV2 fires: **`INC-1001` — elevated 5xx error rate on `checkout-api`.**
 
-There is **one true root cause**: at 08:58 the Core Platform team cut the
+There is **one true root cause**: at 08:58 the Infra Team cut the
 pgbouncer `default_pool_size` from 100 → 40, which starved the `billing-postgres`
 connection pool. `checkout-api` (owned by Payments) is a **victim**, not the
 cause — its 5xx began at 09:02, *before* the Payments deploy at 09:05, and Stripe
@@ -216,11 +216,11 @@ The demo's point is that the **same incident produces two different — and both
 correct — outcomes**, because the right action depends on the team's domain
 knowledge:
 
-| | **Payments Engineering** | **Core Platform / SRE** |
+| | **Payments Engineering** | **Infra Team** |
 |---|---|---|
 | Owns | checkout-api, invoice-worker, webhooks | billing-postgres, **pgbouncer**, kafka, mesh |
 | What it finds | 5xx predates our deploy; Stripe healthy; dominant error is DB-pool exhaustion we don't own | the 08:58 pgbouncer `default_pool_size` 100→40 change starved the pool |
-| Correct outcome | **Not our root cause → escalate / hand off to Core Platform** with the evidence | **Root cause found → revert pool size to 100 + RELOAD**, verify, then monitor |
+| Correct outcome | **Not our root cause → escalate / hand off to Infra Team** with the evidence | **Root cause found → revert pool size to 100 + RELOAD**, verify, then monitor |
 | Cites | `checkout-api-5xx.md`, `service-ownership.md`, postmortem INC-0931 | `postgres-connection-pool.md`, `db-failover-tsg.md`, postmortem INC-0977 |
 | Guardrail it enforces | don't restart invoice-worker in the 09:00–10:00Z settlement window; don't touch pgbouncer/Postgres — escalate | **don't fail over the postgres primary** during business hours |
 

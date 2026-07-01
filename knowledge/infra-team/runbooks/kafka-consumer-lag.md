@@ -1,6 +1,6 @@
 # Runbook: Kafka consumer lag (billing-events)
 
-**Owner:** Core Platform / SRE
+**Owner:** Infra Team
 
 ## Symptom
 

@@ -1,16 +1,16 @@
 ---
-id: platform-team
-name: Core Platform / SRE
+id: infra-team
+name: Infra Team
 type: team
-owner: Core Platform
+owner: Infra Team
 criticality: tier-0
 ---
 
-# Core Platform / SRE
+# Infra Team
 
 ## Purpose
 
-Core Platform owns the **shared infrastructure** that product teams build on:
+Infra Team owns the **shared infrastructure** that product teams build on:
 the Postgres clusters (and the pgbouncer connection poolers in front of them),
 the Kafka cluster, the service mesh, and the Kubernetes node pools. We do not
 own product code such as checkout-api; we own what it runs on.
@@ -57,7 +57,7 @@ would run. Before concluding, you should have run:
 
 - `demo_get_incident` (the incident is symptom-only — it will not contain the
   onset time, the dominant error, the deploys, or the pool change);
-- `demo_list_deployments` filtered to **core-platform** changes to find any
+- `demo_list_deployments` filtered to **infra-team** changes to find any
   pgbouncer / pool-sizing change and its timestamp;
 - `demo_search_logs` for `billing-postgres` and `checkout-api` (filtered on
   `pool`, `pgbouncer`, `connection`) to confirm pool saturation, the error
@@ -73,7 +73,7 @@ actually retrieved, not on the runbook alone.
 ## First Checks During Incident
 
 1. `demo_get_incident` to read the incident and its timeline.
-2. `demo_list_deployments` filtered to **core-platform** changes around the
+2. `demo_list_deployments` filtered to **infra-team** changes around the
    incident time — did we change pool sizing or mesh config?
 3. `demo_search_logs` for `billing-postgres` and for `checkout-api` filtered on
    `pool`, `pgbouncer`, `connection`.

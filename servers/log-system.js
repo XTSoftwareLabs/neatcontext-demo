@@ -12,7 +12,7 @@
 // 09:02, before the 09:05 payments deploy), Stripe is explicitly healthy, and
 // even the webhook slowness is attributed to waiting on a DB connection. So a
 // Payments investigator can correctly conclude "this isn't our service" and
-// hand off, while a Core Platform investigator finds the pool-size change.
+// hand off, while a Infra Team investigator finds the pool-size change.
 
 const logs = {
   "checkout-api": [

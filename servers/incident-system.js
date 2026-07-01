@@ -11,7 +11,7 @@
 //
 // Incident URLs look like:  https://localhost:7801/incidents/INC-1001
 
-// One shared incident with ONE true root cause: the 08:58 core-platform
+// One shared incident with ONE true root cause: the 08:58 infra-team
 // pgbouncer change (default_pool_size 100 -> 40) starved the billing-postgres
 // connection pool. checkout-api (Payments) is a victim, not the cause.
 //
@@ -23,8 +23,8 @@
 // team still reaches its OWN correct outcome from the same raw evidence:
 //   * Payments Engineering finds the 5xx predate its 09:05 deploy, Stripe is
 //     healthy, and the dominant error is shared-DB-pool exhaustion it does not
-//     own, and correctly HANDS OFF to Core Platform.
-//   * Core Platform / SRE finds the 08:58 pool-size change is the root cause and
+//     own, and correctly HANDS OFF to Infra Team.
+//   * Infra Team finds the 08:58 pool-size change is the root cause and
 //     gives the fix + next actions (revert to 100 + RELOAD).
 const incidents = {
   "INC-1001": {
@@ -52,9 +52,9 @@ const incidents = {
     service_ownership: {
       "checkout-api": "Payments Engineering",
       "invoice-worker": "Payments Engineering",
-      "billing-postgres": "Core Platform / SRE",
-      "pgbouncer": "Core Platform / SRE",
-      "kafka-billing-events": "Core Platform / SRE"
+      "billing-postgres": "Infra Team",
+      "pgbouncer": "Infra Team",
+      "kafka-billing-events": "Infra Team"
     },
     // Pointers the NeatContext demo extension can follow into the other systems.
     linked_systems: {

@@ -1,6 +1,6 @@
 # TSG: billing-postgres failover safety
 
-**Owner:** Core Platform / SRE
+**Owner:** Infra Team
 **Severity of getting this wrong:** very high (widens blast radius)
 
 ## Hard rule
