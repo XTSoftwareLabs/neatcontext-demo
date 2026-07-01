@@ -1,0 +1,10 @@
+{
+  "name": "neatcontext-demo",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Demo: how NeatContext lets an LLM use a team's domain knowledge to analyze the same incident differently per team.",
+  "scripts": {
+    "start": "node servers/index.js",
+    "servers": "node servers/index.js"
+  }
+}

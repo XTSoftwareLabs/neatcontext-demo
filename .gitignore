@@ -1,0 +1,7 @@
+# Generated self-signed TLS certs (each machine generates its own)
+servers/certs/
+
+# Logs / OS noise
+*.log
+node_modules/
+.DS_Store

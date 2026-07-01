@@ -1,0 +1,17 @@
+{
+  "id": "ops-demo-systems",
+  "name": "Ops Demo Systems",
+  "version": "0.1.0",
+  "description": "Demo connector: read incidents, logs, and deployments from the local mock Incident/Log/Deployment systems used by the NeatContext incident-analysis demo.",
+  "publisher": "NeatContext Demo",
+  "connection": {
+    "kind": "none"
+  },
+  "mcpServer": {
+    "transport": "stdio",
+    "command": "node",
+    "args": ["./server.cjs"],
+    "requiresConnection": false
+  },
+  "allowed_profiles": []
+}
