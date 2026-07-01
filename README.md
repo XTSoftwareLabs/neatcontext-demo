@@ -81,8 +81,8 @@ not need you to accept anything; it's configured to trust the demo cert.
 2. Open model settings and add your LLM provider (base URL, API key, model name).
    Pick a tool-calling-capable model and make it the active model.
 
-The freshly opened app — the active model shows in the top bar, profiles on the
-left:
+The freshly opened app — your active model shows in the top bar. The workspace
+starts empty; you'll add a domain profile and knowledge base in Steps 5–6:
 
 ![NeatContext just opened](images/03-open-neatcontext.png)
 
