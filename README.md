@@ -140,6 +140,12 @@ off to Infra Team**, with the evidence. (Optionally disable
 `stripe_webhook_auto_retry` as interim load relief, noting it's *not* the fix.)
 A good investigation can correctly end in a hand-off.
 
+Two things the screenshot calls out: the answer is **grounded in the Payments
+knowledge base** — it cites `checkout-api-5xx.md`, `service-ownership.md`, and the
+handoff postmortem as **clickable sources** you can open — and the **domain profile
+shapes the response**, applying its "is this ours?" triage and its "hand off, don't
+touch Infra's surface" rule.
+
 ### Step 6 — Investigate the SAME incident as Team B: Infra Team
 
 Now switch the workspace to the other team:
@@ -162,6 +168,11 @@ change**, confirms the Postgres primary is healthy (so it's the pool ceiling, no
 the database), and gives the **fix + next actions**: revert `default_pool_size` to
 100 and RELOAD pgbouncer (no dropped connections), verify the pool drains and 5xx
 clears, then monitor pool utilization. It **warns not to fail over the primary**.
+
+Same two levers as before: the answer **cites Infra's own runbooks**
+(`postgres-connection-pool.md`, `db-failover-tsg.md`) as clickable sources, and the
+**Infra profile drives the response** — the root-cause fix (revert + RELOAD) and the
+guardrail (don't fail over the primary) come straight from its runbook/TSG.
 
 That contrast — **same incident, hand-off for one team, root-cause-fix for the
 other** — is the whole point of the demo.
