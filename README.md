@@ -82,7 +82,8 @@ not need you to accept anything; it's configured to trust the demo cert.
    Pick a tool-calling-capable model and make it the active model.
 
 The freshly opened app — your active model shows in the top bar. The workspace
-starts empty; you'll add a domain profile and knowledge base in Steps 5–6:
+starts empty with a single chat tab; you'll give each team its own tab, with its
+own domain profile and knowledge base, in Steps 5–6:
 
 ![NeatContext just opened](images/03-open-neatcontext.png)
 
@@ -105,18 +106,23 @@ It now exposes three read-only tools to the model:
 
 ### Step 5 — Investigate as Team A: Payments Engineering
 
-1. **Import the profile.** In the Domain Profiles panel, click *Import local
-   Markdown profile* and choose **`profiles/payments-team.md`**. Make it the
-   **active** profile.
-2. **Add the knowledge base.** Add the folder **`knowledge/payments-team`** as a
-   local knowledge folder.
+Each **chat tab** carries its own domain profile and knowledge base, so every
+team gets its own tab. Whatever you import or add attaches to the tab you're on.
 
-Team A's workspace has **only the Payments profile and only its knowledge base** —
-so the model reasons strictly from this team's context:
+1. **Import the profile into this tab.** In the Domain Profiles panel, click
+   *Import local Markdown profile* and choose **`profiles/payments-team.md`**.
+   It attaches to the current chat tab; make it the **active** profile.
+2. **Add the knowledge base to this tab.** Add the folder
+   **`knowledge/payments-team`** as a local knowledge folder.
 
-![Payments workspace: only its own profile and knowledge base](images/05-payments-workspace.png)
+This tab now has **only the Payments profile and only its knowledge base** — so
+the model reasons strictly from this team's context. (NeatContext titles a tab
+from its first message; the shots label the two tabs *Payments* and *Infra* for
+clarity.)
 
-3. **Ask, in a new chat:**
+![Payments chat tab: only its own profile and knowledge base](images/05-payments-workspace.png)
+
+3. **Ask, in this tab:**
 
    ```
    Please analyze incident https://localhost:7801/incidents/INC-1001.
@@ -148,15 +154,22 @@ touch Infra's surface" rule.
 
 ### Step 6 — Investigate the SAME incident as Team B: Infra Team
 
-Now switch the workspace to the other team:
+No swapping this time — **give Infra its own chat tab** and leave the Payments
+tab exactly as it is.
 
-1. **Import the second profile.** Import **`profiles/infra-team.md`**. Both
-   profiles now exist in the sidebar — **select `infra-team`** so it's active.
-2. **Swap the knowledge base to this team's.** Remove the **`payments-team`**
-   knowledge folder (click the trash icon next to it) and add
-   **`knowledge/infra-team`**, so only Infra Team's runbooks are searched.
+1. **Open a new tab.** Click the **+** next to the chat tabs. A new tab branches
+   from the one you were on, so it starts with Payments' context attached.
+2. **Make this tab Infra's.** Remove the Payments profile and the
+   `payments-team` knowledge folder from *this* tab (the **✕** on each — it
+   detaches them from this tab only; the Payments tab keeps them). Then import
+   **`profiles/infra-team.md`** (make it active) and add the folder
+   **`knowledge/infra-team`**.
 
-![Switch to infra-team and remove Payments' knowledge folder](images/07-infra-switch-remove.png)
+This Infra tab searches **only Infra Team's runbooks**. Click back to the
+Payments tab and its profile and knowledge base are still there — each tab
+remembers its own:
+
+![Infra chat tab with its own profile and knowledge base](images/07-infra-tab.png)
 
 3. Ask the **exact same question** with the **same incident URL** as Step 5.
 
@@ -175,7 +188,8 @@ Same two levers as before: the answer **cites Infra's own runbooks**
 guardrail (don't fail over the primary) come straight from its runbook/TSG.
 
 That contrast — **same incident, hand-off for one team, root-cause-fix for the
-other** — is the whole point of the demo.
+other** — is the whole point of the demo, and both tabs stay side by side so you
+can flip between them and compare.
 
 ---
 
@@ -241,10 +255,13 @@ isn't ours" and hands off; the other team owns the root cause and fixes it.
 ## What the demo proves
 
 - **Domain profiles steer reasoning toward the team's correct action.** The only
-  thing that changes between Step 5 and Step 6 is the active profile + knowledge
-  folder. The incident, the tools, and the raw evidence are identical — yet one
-  team correctly **hands off** (the root cause isn't theirs) and the other team
-  correctly **finds and fixes** it. Same data, two right answers.
+  thing that differs between the two tabs is the profile + knowledge base each
+  one carries. The incident, the tools, and the raw evidence are identical — yet
+  one team correctly **hands off** (the root cause isn't theirs) and the other
+  team correctly **finds and fixes** it. Same data, two right answers.
+- **Each chat tab keeps its own context.** Payments and Infra live in separate
+  tabs in one workspace — no swapping profiles or knowledge folders in and out.
+  Attach each team's profile + knowledge base once, then flip between tabs.
 - **The knowledge base grounds the answer.** Each team's runbooks/TSGs/postmortems
   give the model team-specific first-checks and *dangerous-action* rules it would
   not otherwise know.
