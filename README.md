@@ -1,6 +1,6 @@
 # NeatContext Incident-Analysis Demo
 
-A hands-on demo of **NeatContext**: how giving an LLM a *team's* domain knowledge
+A hands-on demo of **[NeatContext](https://www.neatcontext.com/)**: how giving an LLM a *team's* domain knowledge
 (a domain profile + that team's runbooks/TSGs/postmortems + a tool connector)
 changes how it investigates an incident. The same incident, analyzed by two
 different teams, correctly produces two different outcomes — one team hands the
