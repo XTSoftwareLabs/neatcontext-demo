@@ -49,13 +49,6 @@ const incidents = {
     impact:
       "Customer-facing: a portion of checkout attempts fail with HTTP 500/503. Revenue impact ongoing.",
     related_services: ["billing-api", "invoice-worker", "billing-postgres", "kafka-billing-events"],
-    service_ownership: {
-      "checkout-api": "Payments Engineering",
-      "invoice-worker": "Payments Engineering",
-      "billing-postgres": "Infra Team",
-      "pgbouncer": "Infra Team",
-      "kafka-billing-events": "Infra Team"
-    },
     // Pointers the NeatContext demo extension can follow into the other systems.
     linked_systems: {
       logs: "https://localhost:7802/logs?service=checkout-api&from=2026-06-30T09:00:00Z&to=2026-06-30T09:25:00Z",
