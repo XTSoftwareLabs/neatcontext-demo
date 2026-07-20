@@ -148,8 +148,7 @@ workspace. The first time, ChatGPT Desktop asks you to trust that workspace, its
 6. **Ask, in the Codex chat that opened:**
 
    ```
-   Please analyze incident https://localhost:7801/incidents/INC-1001.
-   What should we check first, and what's the safe action?
+   Please use NeatContext mcp server to analyze incident https://localhost:7801/incidents/INC-1001.
    ```
 
 **What you should see.** Codex calls `get_context` (served by NeatContext),
